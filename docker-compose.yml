@@ -9,8 +9,10 @@ services:
     ports:
       - 3306:3306
     volumes:
-#    ./data:/var/lib/mysql: This line maps the ./data directory on your local machine to the /var/lib/mysql directory inside the MySQL container. This mapping allows the MySQL container to store its data files in the ./data directory on your local machine. By doing this, the data will persist even if the container is stopped or removed.
-#   ./init.sql:/docker-entrypoint-initdb.d/init.sql: This line maps the ./init.sql file on your local machine to the /docker-entrypoint-initdb.d/init.sql file inside the MySQL container. The /docker-entrypoint-initdb.d/ directory is a special directory in the MySQL Docker image, and any SQL files placed in this directory are automatically executed when the container starts up. By mounting the ./init.sql file into this directory, the SQL initialization script will be executed, creating the table with the specified columns during the container startup.
-
       - ./data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - .docker/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      #- ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+      #    ./data:/var/lib/mysql: This line maps the ./data directory on your local machine to the /var/lib/mysql directory inside the MySQL container. This mapping allows the MySQL container to store its data files in the ./data directory on your local machine. By doing this, the data will persist even if the container is stopped or removed.
+      #   ./init.sql:/docker-entrypoint-initdb.d/init.sql: This line maps the ./init.sql file on your local machine to the /docker-entrypoint-initdb.d/init.sql file inside the MySQL container. The /docker-entrypoint-initdb.d/ directory is a special directory in the MySQL Docker image, and any SQL files placed in this directory are automatically executed when the container starts up. By mounting the ./init.sql file into this directory, the SQL initialization script will be executed, creating the table with the specified columns during the container startup.
+
