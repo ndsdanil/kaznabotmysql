@@ -7,4 +7,5 @@ I want to add in this project:
 1.ability to insert the debts and loans. 
 2.ability to get the analisys of income and expenses. 
 3.ability to get the prediction of income, expenses using Machine Learning time series.
-4.ability to get the resulted summ in euro, rub, dollars based on the actual coeficients.  
+4.ability to get the resulted summ in euro, rub, dollars based on the actual coeficients.
+5.ability to add payable subscriptions to not forget about it.  

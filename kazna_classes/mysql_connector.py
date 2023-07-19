@@ -4,7 +4,7 @@ class Mysql_connector:
     #insert income, insert expense (both have a lot sourses), insert debts, loans.
     def insert_sql_query(type:str, source:str, column:str, value:str):
         cnx = mysql.connector.connect(
-            host='127.0.0.1',  # assuming the MySQL container is running on the same machine
+            host='mysql',  # assuming the MySQL container is running on the same machine
             port='3306',  # the port defined in the docker-compose.yaml file
             user='root',  # default username for the MySQL container
             password='12345',  # the password defined in the docker-compose.yaml file
