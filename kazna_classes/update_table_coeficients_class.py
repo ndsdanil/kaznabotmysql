@@ -1,4 +1,4 @@
-from google_sheet_connector import google_sheet_connector
+
 import requests
 from bs4 import BeautifulSoup
 

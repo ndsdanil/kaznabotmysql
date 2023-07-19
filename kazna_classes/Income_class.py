@@ -1,6 +1,7 @@
 from mysql_connector import Mysql_connector
 from telebot import types
 
+#This class represents Income scenario, all these methods - the steps to get the Income information inserted in the telegram bot and set it into mysql database.
 class Income:
     
     def __init__(self, bot):
