@@ -78,6 +78,7 @@ class Debts_loans:
 
     def set_loan_to_db(self, message):
         self.loan_details_or_sum = message.text
+        self.bot.send_message(message.chat.id, self.loan_details_or_sum)
         self.bot.send_message(message.chat.id, "The loan is set")
         Mysql_connector.insert_debt_loan_to_db('Loan', self.loan_type, self.loan_person, self.loan_details_or_sum) 
         self.bot.send_message(message.chat.id, "You inserted Loan entry succesfully ") 

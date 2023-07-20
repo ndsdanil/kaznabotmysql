@@ -55,7 +55,7 @@ class Mysql_connector:
             port='3306',  # the port defined in the docker-compose.yaml file
             user='root',  # default username for the MySQL container
             password='12345',  # the password defined in the docker-compose.yaml file
-            database='debts_loans_table'  # the database name defined in the docker-compose.yaml file
+            database='kazna_bot_mysql'  # the database name defined in the docker-compose.yaml file
         )
 
         # Create a cursor object to execute SQL queries
@@ -68,9 +68,10 @@ class Mysql_connector:
         return results
     
     def insert_debt_loan_to_db(debt_or_loan_type:str, type:str, person:str, details_or_sum:str):
-        if details_or_sum == 'Money':
+        details_or_sum_column = ''
+        if type== 'Money':
             details_or_sum_column = 'Debt_Loan_sum'
-        elif details_or_sum == 'Other':
+        elif type== 'Other':
             details_or_sum_column = 'Details' 
 
         cnx = mysql.connector.connect(
@@ -78,13 +79,14 @@ class Mysql_connector:
             port='3306',  # the port defined in the docker-compose.yaml file
             user='root',  # default username for the MySQL container
             password='12345',  # the password defined in the docker-compose.yaml file
-            database='debts_loans_table'  # the database name defined in the docker-compose.yaml file
+            database='kazna_bot_mysql'  # the database name defined in the docker-compose.yaml file
         )
 
         # Create a cursor object to execute SQL queries
         cursor = cnx.cursor()
         # Get values from the last inserted row to be able to count the new columns values based on new incertion. If there is no previous row, colums will get the 0 values
-        cursor.execute('INSERT INTO debts_loans_table (Debt_or_Loan_type, Type, Person , '+ str(details_or_sum_column) +') VALUES (' + str(debt_or_loan_type)+', ' + str(type) + ', ' + str(person) + ', ' + str(details_or_sum) +');')
+        cursor.execute('INSERT INTO debts_loans_table (Debt_or_Loan_type, Type, Person , ' + str(details_or_sum_column) + ') VALUES (' + debt_or_loan_type +', ' + str(type) + ', ' + str(person) + ', ' + str(details_or_sum) +');')
+        cursor.execute('COMMIT;')
         cursor.close()
         cnx.close()
         
