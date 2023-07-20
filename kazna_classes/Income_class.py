@@ -27,8 +27,6 @@ class Income:
     
     def set_income_column(self, message):
         self.user_income_column = message.text
-        print('value = '+ self.user_income_number)
-        print('now we wil test incoming values from income class, column and income number' + str(self.user_income_column) + ' ' + self.user_income_number)
         Mysql_connector.insert_sql_query('Income', self.user_income_source, self.user_income_column, self.user_income_number)
         self.bot.send_message(message.chat.id, "You inserted income entry succesfully ")   
         

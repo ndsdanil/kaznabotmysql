@@ -1,0 +1,74 @@
+# help from chatGPT
+import telebot
+
+# Replace 'YOUR_TELEGRAM_BOT_TOKEN' with your actual Telegram bot token
+bot = telebot.TeleBot('YOUR_TELEGRAM_BOT_TOKEN')
+
+# Method to create the database (you should implement this method)
+def create_db():
+    # Implement your code to create the database here
+    pass
+
+# Start command handler
+@bot.message_handler(commands=['start'])
+def handle_start(message):
+    markup = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    markup.add(telebot.types.KeyboardButton('income'), telebot.types.KeyboardButton('expense'), telebot.types.KeyboardButton('debt'))
+    bot.send_message(message.chat.id, "Choose an option:", reply_markup=markup)
+
+# Debt command handler
+@bot.message_handler(func=lambda message: message.text == 'debt')
+def handle_debt(message):
+    markup = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    markup.add(telebot.types.KeyboardButton('Loan'), telebot.types.KeyboardButton('debt'), telebot.types.KeyboardButton('info'))
+    bot.send_message(message.chat.id, "Choose an option:", reply_markup=markup)
+
+# Info command handler
+@bot.message_handler(func=lambda message: message.text == 'info')
+def handle_info(message):
+    markup = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    markup.add(telebot.types.KeyboardButton('Loan info'), telebot.types.KeyboardButton('Debt info'))
+    bot.send_message(message.chat.id, "Choose an option:", reply_markup=markup)
+
+# Loan info command handler
+@bot.message_handler(func=lambda message: message.text == 'Loan info')
+def handle_loan_info(message):
+    create_db()
+    bot.send_message(message.chat.id, "Loan info menu")
+
+# Debt info command handler
+@bot.message_handler(func=lambda message: message.text == 'Debt info')
+def handle_debt_info(message):
+    create_db()
+    bot.send_message(message.chat.id, "Debt info menu")
+
+# Other commands and messages handler
+@bot.message_handler(func=lambda message: True)
+def handle_other_messages(message):
+    bot.send_message(message.chat.id, "Unknown command. Please use the provided menu.")
+
+# Start polling for new messages
+bot.polling()
+
+
+
+ChatGPT hello! I use telebot for my telegram bot.
+I need to make menu. When user press /start, menu with 3 buttons appears: 'income', 'expense','debt'. when user will press 'debt' button then new menu will appears with 3 buttons: 'Loan', 'debt','info'. When user will press 'info' button then  new menu appears with 2 buttons: 'Loan info', 'Debt info', every of these two buttons should launch the method 'create_db()' in 'mysqld' folder.
+
+How can I write this code on python?  
+
+
+
+Certainly! In the code snippet provided, the func=lambda message: message.text == 'Debt info' part is used as a filter to determine which handler function should be executed based on the content of the user's message. Let's break it down:
+
+    func: This is a keyword argument for the message_handler decorator provided by the telebot library. It allows you to specify a function that will act as a filter to determine if the decorated handler function should be triggered or not.
+
+    lambda message: message.text == 'Debt info': This is a lambda function (an anonymous function) that takes a single argument message, representing the incoming message from the user. The lambda function checks if the text attribute of the message object is equal to 'Debt info'.
+
+    When the message_handler decorator is applied to the handle_debt_info function with the func argument set to the specified lambda function, it means that this handler function will only be triggered if the condition message.text == 'Debt info' evaluates to True.
+
+In simpler terms, func=lambda message: message.text == 'Debt info' acts as a filter for incoming messages. It ensures that the handle_debt_info function will only be executed when the user sends a message with the text 'Debt info', and it will ignore messages with other texts.
+
+This way, you can have different handler functions for different user inputs and perform specific actions based on the content of their messages. In this particular case, it allows us to trigger the create_db() method and send a specific response message when the user selects 'Debt info' from the menu.
+
+

@@ -49,10 +49,44 @@ class Mysql_connector:
         cursor.close()
         cnx.close()
         
+    def get_debt_loan_info_from_db(debt_or_loan_type:str):
+        cnx = mysql.connector.connect(
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port='3306',  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password='12345',  # the password defined in the docker-compose.yaml file
+            database='debts_loans_table'  # the database name defined in the docker-compose.yaml file
+        )
 
-       
+        # Create a cursor object to execute SQL queries
+        cursor = cnx.cursor()
+        # Get values from the last inserted row to be able to count the new columns values based on new incertion. If there is no previous row, colums will get the 0 values
+        cursor.execute('SELECT id, Debt_or_Loan_type, Person, Debt_Loan_sum, Details FROM debts_loans_table WHERE Debt_or_Loan_type = ' + str(debt_or_loan_type) + ';')
+        results = cursor.fetchall()
+        cursor.close()
+        cnx.close()
+        return results
+    
+    def insert_debt_loan_to_db(debt_or_loan_type:str, type:str, person:str, details_or_sum:str):
+        if details_or_sum == 'Money':
+            details_or_sum_column = 'Debt_Loan_sum'
+        elif details_or_sum == 'Other':
+            details_or_sum_column = 'Details' 
 
-        
+        cnx = mysql.connector.connect(
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port='3306',  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password='12345',  # the password defined in the docker-compose.yaml file
+            database='debts_loans_table'  # the database name defined in the docker-compose.yaml file
+        )
+
+        # Create a cursor object to execute SQL queries
+        cursor = cnx.cursor()
+        # Get values from the last inserted row to be able to count the new columns values based on new incertion. If there is no previous row, colums will get the 0 values
+        cursor.execute('INSERT INTO debts_loans_table (Debt_or_Loan_type, Type, Person , '+ str(details_or_sum_column) +') VALUES (' + str(debt_or_loan_type)+', ' + str(type) + ', ' + str(person) + ', ' + str(details_or_sum) +');')
+        cursor.close()
+        cnx.close()
         
 
         

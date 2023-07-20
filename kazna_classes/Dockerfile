@@ -6,7 +6,8 @@ WORKDIR /kazna_mysql/kazna_classes/
 
 # Copy the Python files into the container
 COPY Expense_class.py ./
-COPY Income_class.py ./  
+COPY Income_class.py ./
+COPY Debts_loans_class.py ./  
 COPY kaznabot_main.py ./
 COPY mysql_connector.py ./
 COPY .env ./
