@@ -1,4 +1,4 @@
-import telebot
+
 from mysql_connector import Mysql_connector
 from telebot import types
 
@@ -11,11 +11,12 @@ class Debts_loans:
         self.bot = bot 
 
     def set_debt_type(self, message):
-        self.bot.send_message(message.chat.id, "You chose to set a new Debt, please, choose the type of Debt (Money, Other)")
+        
         markup = types.ReplyKeyboardMarkup(row_width=2, one_time_keyboard=True)
         options = ['Money', 'Other']
         buttons = [types.KeyboardButton(option) for option in options]
         markup.add(*buttons)
+        self.bot.send_message(message.chat.id, "You chose to set a new Debt, please, choose the type of Debt (Money, Other)", reply_markup=markup)
         self.bot.register_next_step_handler(message, self.set_person_debt)
 
     def set_person_debt(self, message):
@@ -40,18 +41,19 @@ class Debts_loans:
 
     def set_debt_to_db(self, message):
         self.debt_details_or_sum = message.text
+        self.bot.send_message(message.chat.id, "The debt is set")
         Mysql_connector.insert_debt_loan_to_db('Debt', self.debt_type, self.debt_person, self.debt_details_or_sum) 
         self.bot.send_message(message.chat.id, "You inserted Debt entry succesfully ") 
-        
+         
 
 
     #Loan part
     def set_loan_type(self, message):
-        self.bot.send_message(message.chat.id, "You chose to set a new Loan, please, choose the type of Loan (Money, Other)")
         markup = types.ReplyKeyboardMarkup(row_width=2, one_time_keyboard=True)
         options = ['Money', 'Other']
         buttons = [types.KeyboardButton(option) for option in options]
         markup.add(*buttons)
+        self.bot.send_message(message.chat.id, "You chose to set a new Loan, please, choose the type of Loan (Money, Other)", reply_markup=markup)
         self.bot.register_next_step_handler(message, self.set_person_loan)
 
     def set_person_loan(self, message):
@@ -76,13 +78,15 @@ class Debts_loans:
 
     def set_loan_to_db(self, message):
         self.loan_details_or_sum = message.text
+        self.bot.send_message(message.chat.id, "The loan is set")
         Mysql_connector.insert_debt_loan_to_db('Loan', self.loan_type, self.loan_person, self.loan_details_or_sum) 
         self.bot.send_message(message.chat.id, "You inserted Loan entry succesfully ") 
-        
+         
 
     #get info about existing loan or Debt
     def get_loan_debt_info(self, message):
         self.debt_or_loan_type = message.text
+        self.bot.send_message(message.chat.id, "The info is provided")
         list_of_debts_or_loans = Mysql_connector.get_debt_loan_info_from_db( self.debt_or_loan_type)
         self.bot.send_message(message.chat.id, list_of_debts_or_loans)
         

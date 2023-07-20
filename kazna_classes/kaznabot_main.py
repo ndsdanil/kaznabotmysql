@@ -35,7 +35,7 @@ def start_message(message):
         buttons = [types.KeyboardButton(option) for option in options]
         markup.add(*buttons)
         bot.send_message(message.chat.id, "Welcome ! This bot will help you to leash your Income, Expenses, Debts and Loans. Please choose an option:", reply_markup=markup)
-        #bot.register_next_step_handler(message, setup_income_expense_options)
+        bot.register_next_step_handler(message, setup_income_expense_options)
 
 #Depends on selection in the step above, call the proper method with proper scenario
 @bot.message_handler(commands=['Income', 'Expense', 'Debts Loans'])
@@ -53,27 +53,37 @@ def setup_income_expense_options(message):
     elif user_data == 'Expense':
         bot.register_next_step_handler(message,  expense.info_message_expense(message))
     elif user_data == 'Debts Loans':
-        bot.send_message(message.chat.id, "You chosen debts and Loans option:", reply_markup=markup_debts_loans)
-        #bot.register_next_step_handler(message,  choose_debt_loan_options(message))
+        bot.send_message(message.chat.id, "You chosen debts and Loans option", reply_markup=markup_debts_loans)
+        bot.register_next_step_handler(message,  choose_debt_loan_options(message))
 
 
-@bot.message_handler(commands=['Debt', 'Loan', 'Get Info'])
+@bot.message_handler(commands=['Debts loans'])
 def choose_debt_loan_options(message):
     user_debt_loan_data = message.text
 
     markup_info_debts_loans = types.ReplyKeyboardMarkup(row_width=2, one_time_keyboard=True)
-    options_info_debts_loans = ['Debt info', 'Loan info', 'Back']
+    options_info_debts_loans = ['Debt', 'Loan', 'Get Info']
     buttons_info_debts_loans = [types.KeyboardButton(option) for option in options_info_debts_loans]
     markup_info_debts_loans.add(*buttons_info_debts_loans)
-    
+    bot.register_next_step_handler(message, choose_debt_loan_options1)
 
-    if user_debt_loan_data == 'Debt':
+@bot.message_handler(commands=['Debt', 'Loan', 'Get Info'])
+def choose_debt_loan_options1(message):
+    user_debt_loan_data1 = message.text
+
+    markup = types.ReplyKeyboardMarkup(row_width=2, one_time_keyboard=True)
+    options = ['Debt info', 'Loan info', 'Back']
+    buttons = [types.KeyboardButton(option) for option in options]
+    markup.add(*buttons)
+    bot.register_next_step_handler(message,  choose_info_debt_loan_options(message))
+
+    if user_debt_loan_data1 == 'Debt':
         bot.register_next_step_handler(message, debt_loan.set_debt_type(message))    
-    elif user_debt_loan_data == 'Loan':
+    elif user_debt_loan_data1 == 'Loan':
         bot.register_next_step_handler(message, debt_loan.set_loan_type(message)) 
-    elif user_debt_loan_data == 'Get Info':
-        bot.send_message(message.chat.id, "You chosen debts and Loans option:", reply_markup=markup_info_debts_loans)
-        #bot.register_next_step_handler(message,  choose_debt_loan_options(message))
+    elif user_debt_loan_data1 == 'Get Info':
+        bot.send_message(message.chat.id, "You chosen get info option:", reply_markup=markup)
+        
 
 @bot.message_handler(commands=['Debt info', 'Loan info', 'Back'])
 def choose_info_debt_loan_options(message):
@@ -81,8 +91,9 @@ def choose_info_debt_loan_options(message):
     
     if user_info_debt_loan_data  == 'Debt info' or user_info_debt_loan_data  == 'Loan info':
         bot.register_next_step_handler(message,  debt_loan.get_loan_debt_info(message))    
-    elif user_info_debt_loan_data  == 'Back':    
-     #   bot.register_next_step_handler(message,  debt_loan.start_message(message)) 
-        print('Nazad)')
+        
+    elif user_info_debt_loan_data  == 'Back': 
+        bot.send_message(message.chat.id, "You chosen Back option:")
+        bot.send_message(message.chat.id, "/start")
 
 bot.infinity_polling()
