@@ -44,6 +44,7 @@ class Debts_loans:
         self.bot.send_message(message.chat.id, "The debt is set")
         Mysql_connector.insert_debt_loan_to_db('Debt', self.debt_type, self.debt_person, self.debt_details_or_sum) 
         self.bot.send_message(message.chat.id, "You inserted Debt entry succesfully ") 
+        self.bot.send_message(message.chat.id, '/start')
          
 
 
@@ -78,10 +79,10 @@ class Debts_loans:
 
     def set_loan_to_db(self, message):
         self.loan_details_or_sum = message.text
-        self.bot.send_message(message.chat.id, self.loan_details_or_sum)
-        self.bot.send_message(message.chat.id, "The loan is set")
+        self.bot.send_message(message.chat.id, "The loan is set" + str(self.loan_details_or_sum))
         Mysql_connector.insert_debt_loan_to_db('Loan', self.loan_type, self.loan_person, self.loan_details_or_sum) 
         self.bot.send_message(message.chat.id, "You inserted Loan entry succesfully ") 
+        self.bot.send_message(message.chat.id, '/start')
          
 
     #get info about existing loan or Debt
@@ -89,5 +90,6 @@ class Debts_loans:
         self.debt_or_loan_type = message.text
         self.bot.send_message(message.chat.id, "The info is provided")
         list_of_debts_or_loans = Mysql_connector.get_debt_loan_info_from_db( self.debt_or_loan_type)
-        self.bot.send_message(message.chat.id, list_of_debts_or_loans)
+        self.bot.send_message(message.chat.id, str(list_of_debts_or_loans))
+        self.bot.send_message(message.chat.id, '/start')
         

@@ -61,7 +61,7 @@ class Mysql_connector:
         # Create a cursor object to execute SQL queries
         cursor = cnx.cursor()
         # Get values from the last inserted row to be able to count the new columns values based on new incertion. If there is no previous row, colums will get the 0 values
-        cursor.execute('SELECT id, Debt_or_Loan_type, Person, Debt_Loan_sum, Details FROM debts_loans_table WHERE Debt_or_Loan_type = ' + str(debt_or_loan_type) + ';')
+        cursor.execute('SELECT id, Debt_or_Loan_type, Person, Debt_Loan_sum, Details FROM debts_loans_table WHERE Debt_or_Loan_type = \'' + str(debt_or_loan_type) + '\';')
         results = cursor.fetchall()
         cursor.close()
         cnx.close()
@@ -72,7 +72,12 @@ class Mysql_connector:
         if type== 'Money':
             details_or_sum_column = 'Debt_Loan_sum'
         elif type== 'Other':
-            details_or_sum_column = 'Details' 
+            details_or_sum_column = 'Details'
+            details_or_sum = '\''+ str(details_or_sum)+ '\''
+
+        for i in range(10):
+            print(details_or_sum_column)
+            print(type)
 
         cnx = mysql.connector.connect(
             host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
@@ -85,7 +90,7 @@ class Mysql_connector:
         # Create a cursor object to execute SQL queries
         cursor = cnx.cursor()
         # Get values from the last inserted row to be able to count the new columns values based on new incertion. If there is no previous row, colums will get the 0 values
-        cursor.execute('INSERT INTO debts_loans_table (Debt_or_Loan_type, Type, Person , ' + str(details_or_sum_column) + ') VALUES (' + debt_or_loan_type +', ' + str(type) + ', ' + str(person) + ', ' + str(details_or_sum) +');')
+        cursor.execute('INSERT INTO debts_loans_table (Debt_or_Loan_type, Type, Person , ' + str(details_or_sum_column) + ') VALUES (\'' + debt_or_loan_type +'\', \'' + str(type) + '\', \'' + str(person) + '\', ' + str(details_or_sum) +');')
         cursor.execute('COMMIT;')
         cursor.close()
         cnx.close()
