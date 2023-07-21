@@ -75,10 +75,6 @@ class Mysql_connector:
             details_or_sum_column = 'Details'
             details_or_sum = '\''+ str(details_or_sum)+ '\''
 
-        for i in range(10):
-            print(details_or_sum_column)
-            print(type)
-
         cnx = mysql.connector.connect(
             host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
             port='3306',  # the port defined in the docker-compose.yaml file
