@@ -40,11 +40,20 @@ class Debts_loans:
     def set_person_debt(self, message):
         self.debt_details_or_sum = message.text
         self.bot.send_message(message.chat.id, "Please enter name of the Person you owe")  
-        self.bot.register_next_step_handler(message, self.set_debt_to_db) 
+        self.bot.register_next_step_handler(message, self.set_currency_debt) 
+
+    def set_currency_debt(self, message):
+        self.debt_person= message.text
+        markup = types.ReplyKeyboardMarkup(row_width=1, one_time_keyboard=True)
+        options = ['$', 'RUB', 'EUR']
+        buttons = [types.KeyboardButton(option) for option in options]
+        markup.add(*buttons)
+        self.bot.send_message(message.chat.id, "Please, choose the currency type of Debt", reply_markup=markup)
+        self.bot.register_next_step_handler(message, self.set_debt_to_db)
 
     def set_debt_to_db(self, message):
-        self.debt_person = message.text
-        Mysql_connector.insert_debt_loan_to_db('Debt', self.money_or_other_type, self.debt_person, self.debt_details_or_sum) 
+        self.debt_currency = message.text
+        Mysql_connector.insert_debt_loan_to_db('Debt', self.money_or_other_type, self.debt_person, self.debt_details_or_sum, self.debt_currency ) 
         self.bot.send_message(message.chat.id, "You inserted Debt entry succesfully ") 
         self.bot.send_message(message.chat.id, '/start')
          
@@ -71,25 +80,41 @@ class Debts_loans:
     def set_loan_sum(self, message):
         self.money_or_other_type_loan  = message.text
         self.bot.send_message(message.chat.id, "Please insert the summ of loan")  
-        self.bot.register_next_step_handler(message, self.set_person_loan) 
+        self.bot.register_next_step_handler(message, self.set_currency_loan) 
 
     def set_details_loan(self, message):
         self.money_or_other_type_loan = message.text
         self.bot.send_message(message.chat.id, "Please insert the Details of loan")  
         self.bot.register_next_step_handler(message, self.set_person_loan)   
 
+    def set_currency_loan(self, message):
+        self.loan_details_or_sum= message.text
+        markup = types.ReplyKeyboardMarkup(row_width=1, one_time_keyboard=True)
+        options = ['$', 'RUB', 'EUR']
+        buttons = [types.KeyboardButton(option) for option in options]
+        markup.add(*buttons)
+        self.bot.send_message(message.chat.id, "Please, choose the currency type of Loan", reply_markup=markup)
+        self.bot.register_next_step_handler(message, self.set_person_loan)
+
     def set_person_loan(self, message):
-        self.loan_details_or_sum  = message.text
-        self.bot.send_message(message.chat.id, "Please enter name of the Person which owe you")  
-        self.bot.register_next_step_handler(message, self.set_loan_to_db) 
+        if self.money_other_type == 'Money':
+            self.currency = message.text
+        elif self.money_other_type == 'Other':
+            self.loan_details_or_sum = message.text
+            self.currency = 'None'
+
+        self.bot.send_message(message.chat.id, "Please enter name of the Person which owe you")   
+        self.bot.register_next_step_handler(message, self.set_loan_to_db)
 
 
     def set_loan_to_db(self, message):
         self.loan_person= message.text
+        #self.currency = message.text
         self.bot.send_message(message.chat.id, "The loan is set" + str(self.loan_details_or_sum))
-        Mysql_connector.insert_debt_loan_to_db('Loan', self.money_or_other_type_loan, self.loan_person, self.loan_details_or_sum) 
+        Mysql_connector.insert_debt_loan_to_db('Loan', self.money_or_other_type_loan, self.loan_person, self.loan_details_or_sum, self.currency) 
         self.bot.send_message(message.chat.id, "You inserted Loan entry succesfully ") 
         self.bot.send_message(message.chat.id, '/start')
+
          
 
     #get info about existing loan or Debt
@@ -102,6 +127,29 @@ class Debts_loans:
         else:
             self.bot.send_message(message.chat.id, 'Wrong info type')
         list_of_debts_or_loans = Mysql_connector.get_debt_loan_info_from_db(self.info_type)
-        self.bot.send_message(message.chat.id, str(list_of_debts_or_loans)) 
+        clean_get_list='id  Type  Name  Sum  Cur  Info \n'
+        for i in range(0,len(list_of_debts_or_loans)):
+            clean_get_list = clean_get_list + str(list_of_debts_or_loans[i][0:6]).replace('(','').replace(')','')+'\n'
+        self.bot.send_message(message.chat.id, str(clean_get_list)) 
         self.bot.send_message(message.chat.id, '/start')
-        
+
+        markup = types.ReplyKeyboardMarkup(row_width=1, one_time_keyboard=True)
+        options = ['Delete Debt/Loan', 'Back']
+        buttons = [types.KeyboardButton(option) for option in options]
+        markup.add(*buttons)
+        self.bot.send_message(message.chat.id, "If you want, you can delete something by id", reply_markup=markup)
+        self.bot.register_next_step_handler(message, self.delete_loan_or_debt(message))
+
+    def delete_loan_or_debt(self,message):
+        self.delete_or_no = message.text
+        self.bot.send_message(message.chat.id, self.delete_or_no)
+        self.bot.register_next_step_handler(message, self.delete_loan_or_debt1())
+    def delete_loan_or_debt1(self,message):   
+        self.delete_or_no = message.text
+        self.bot.send_message(message.chat.id, self.delete_or_no)
+        if self.delete_or_no == 'Delete Debt/Loan':
+            self.bot.send_message(message.chat.id, "Ebaaa, chose ID to delete")
+        elif self.delete_or_no == 'Back':
+            self.bot.send_message(message.chat.id, '/start')
+        else:
+            print('aaasd')
