@@ -90,6 +90,23 @@ class Mysql_connector:
         cursor.execute('COMMIT;')
         cursor.close()
         cnx.close()
+
+    def delete_loan_debt_by_id(id:str):
+        cnx = mysql.connector.connect(
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port='3306',  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password='12345',  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql'  # the database name defined in the docker-compose.yaml file
+        )
+
+        # Create a cursor object to execute SQL queries
+        cursor = cnx.cursor()
+        # Get values from the last inserted row to be able to count the new columns values based on new incertion. If there is no previous row, colums will get the 0 values
+        cursor.execute('DELETE FROM debts_loans_table WHERE id =' + id + ';')
+        cursor.execute('COMMIT;')
+        cursor.close()
+        cnx.close()
         
 
         

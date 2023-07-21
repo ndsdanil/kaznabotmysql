@@ -56,7 +56,6 @@ def setup_income_expense_options(message):
         bot.send_message(message.chat.id, "You chosen debts and Loans option", reply_markup=markup_debts_loans)
         bot.register_next_step_handler(message,  choose_debt_loan_options(message))
 
-
 @bot.message_handler(commands=['Debts loans'])
 def choose_debt_loan_options(message):
     user_debt_loan_data = message.text
@@ -83,8 +82,7 @@ def choose_debt_loan_options1(message):
         bot.register_next_step_handler(message, debt_loan.set_loan_type(message)) 
     elif user_debt_loan_data1 == 'Get Info':
         bot.send_message(message.chat.id, "You chosen get info option:", reply_markup=markup)
-        bot.register_next_step_handler(message,  choose_info_debt_loan_options)
-        
+        bot.register_next_step_handler(message,  choose_info_debt_loan_options)     
 
 @bot.message_handler(commands=['Debt info', 'Loan info', 'Back'])
 def choose_info_debt_loan_options(message):
