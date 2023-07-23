@@ -108,5 +108,26 @@ class Mysql_connector:
         cursor.close()
         cnx.close()
         
+#Analysis part
+    #Query for nalysis of income and expense
 
+    def get_income_expense_info_query():
+        cnx = mysql.connector.connect(
+            host='127.0.0.1',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port='3306',  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password='12345',  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql'  # the database name defined in the docker-compose.yaml file
+        )
+        income_expense_info_list = list()
+        # Create a cursor object to execute SQL queries
+        cursor = cnx.cursor()
+        # Get values from the last inserted row to be able to count the new columns values based on new incertion. If there is no previous row, colums will get the 0 values
+        cursor.execute('SELECT cash_euro_with_me, cash_euro_not_with_me, cash_$_with_me, cash_$_not_with_me, card_euro, card_$, cash_RUB_not_with_me, card_RUB, bitcoin, shares_RUB from kazna_mysql_table ORDER BY id DESC LIMIT 1;')
+        income_expense_info_list.append(cursor.fetchall())
+        cursor.execute('SELECT date, cash_euro_with_me, cash_euro_not_with_me, cash_$_with_me, cash_$_not_with_me, card_euro, card_$, cash_RUB_not_with_me, card_RUB, bitcoin, shares_RUB from kazna_mysql_table ORDER BY id DESC;')
+        income_expense_info_list.append(cursor.fetchall())
+        cursor.close()
+        cnx.close()
+        return income_expense_info_list
         

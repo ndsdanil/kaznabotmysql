@@ -28,6 +28,5 @@ RUN pip install urllib3
 RUN pip install websocket-client
 RUN pip install charset-normalizer 
 RUN pip install setuptools 
-RUN rm /etc/mysql/my.cnf
-RUN touch /etc/mysql/my.cnf
+RUN pip install beautifulsoup4
 
