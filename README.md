@@ -11,9 +11,14 @@ docker-compose up
 
 Your app is ready. Type /start in your telegram bot.
 
+Released features:
+-ability to add Income and Expense
+-ability to insert, show, delete the debts and loans.
+-ability to get the overall summ in euro, rub, dollars based on the actual coeficients.  
+-ability to add, show, delete payable subscriptions to not forget about it. 
+
 Next features: 
-1.ability to insert the debts and loans. 
-2.ability to get the analisys of income and expenses. 
-3.ability to get the prediction of income, expenses using Machine Learning time series.
-4.ability to get the overall summ in euro, rub, dollars based on the actual coeficients.
-5.ability to add payable subscriptions to not forget about it.  
+1.ability to get the analisys of income and expenses. 
+2.ability to get the prediction of income, expenses using Machine Learning time series.
+
+  
