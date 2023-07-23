@@ -10,6 +10,8 @@ COPY Income_class.py ./
 COPY Debts_loans_class.py ./  
 COPY kaznabot_main.py ./
 COPY mysql_connector.py ./
+COPY income_expense_analysis.py ./
+COPY Payable_subscriptions_class.py ./
 COPY .env ./
 
 # Install necessary dependencies

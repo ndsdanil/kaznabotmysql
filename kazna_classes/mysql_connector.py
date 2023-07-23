@@ -113,7 +113,7 @@ class Mysql_connector:
 
     def get_income_expense_info_query():
         cnx = mysql.connector.connect(
-            host='127.0.0.1',  # assuming the MySQL container is running on the separate docker container with mysql image
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
             port='3306',  # the port defined in the docker-compose.yaml file
             user='root',  # default username for the MySQL container
             password='12345',  # the password defined in the docker-compose.yaml file
@@ -130,4 +130,50 @@ class Mysql_connector:
         cursor.close()
         cnx.close()
         return income_expense_info_list
+    
+    #Payable subscription part
+    # payable_subscriptions_table(id int AUTO_INCREMENT PRIMARY KEY, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Subscription_name VARCHAR(30), Price FLOAT(10, 2), Currency 
+
+    def set_subscription(subscription_name, subscription_sum, subscription_cur):
+        cnx = mysql.connector.connect(
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port='3306',  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password='12345',  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql'  # the database name defined in the docker-compose.yaml file
+        )
+        cursor = cnx.cursor()
+        cursor.execute('INSERT INTO payable_subscriptions_table (Subscription_name, Price, Currency) VALUES (\''+ str(subscription_name) + '\', \'' + str(subscription_sum) + '\', \'' + str(subscription_cur) +'\');')
+        cursor.execute('COMMIT;')
+        cursor.close()
+        cnx.close()
+
+    def get_subscriptions():
+        cnx = mysql.connector.connect(
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port='3306',  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password='12345',  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql'  # the database name defined in the docker-compose.yaml file
+        )
+        cursor = cnx.cursor()
+        cursor.execute('SELECT id, Subscription_name, Price, Currency FROM payable_subscriptions_table;')
+        results = cursor.fetchall()
+        cursor.close()
+        cnx.close()
+        return results
+
+    def del_subscriptions(id):
+        cnx = mysql.connector.connect(
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port='3306',  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password='12345',  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql'  # the database name defined in the docker-compose.yaml file
+        )
+        cursor = cnx.cursor()
+        cursor.execute('DELETE FROM payable_subscriptions_table WHERE id =' + id + ';')
+        cursor.execute('COMMIT;')
+        cursor.close()
+        cnx.close()
         

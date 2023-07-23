@@ -29,17 +29,13 @@ class Income_expense_analysis:
             link_euro_dollar :euro_dollar_value,
             link_euro_bitc:euro_bitc_value,
             link_euro_rub:euro_rub_value,}
-        coeff_dict = {'euro_dollar':0, 'euro_bitc':0, 'euro_rub':0}
 
         for key, val in data_dict.items():
             response = requests.get(key)
             soup = BeautifulSoup(response.text, 'html.parser') 
             exchange_value = soup.find('div', attrs = {'class':'YMlKec fxKbKc'}).text
-            print(str(exchange_value))
             #Update coeficients
-            data_dict[key] = exchange_value 
-
-        print(str(data_dict))
+            data_dict[key] = exchange_value
             
         income_expense_info_list  = Mysql_connector.get_income_expense_info_query()
 
@@ -48,9 +44,8 @@ class Income_expense_analysis:
         # 'euro_dollar':AA3, 'euro_bitc':AA2, 'euro_rub':AA5}
 
         #H2+I2+(J2/AA$3)+(K2/AA$3)+(L2-(L2*AA$4))+(M2/AA$3-((M2/AA$3)*AA$4))+(N2/AA$5)+(O2/AA$5)+(P2/AA$2)+(Q2/AA$5)
-
+       
         result_eur = income_expense_info_list[0][0][0] + income_expense_info_list[0][0][1] + (float(income_expense_info_list[0][0][2])/float(data_dict[link_euro_dollar])) + (float(income_expense_info_list[0][0][3])/float(data_dict[link_euro_dollar])) + (income_expense_info_list[0][0][4] - (income_expense_info_list[0][0][4]* eurocard_coef)) + (float(income_expense_info_list[0][0][5])/float(data_dict[link_euro_dollar]) - ((float(income_expense_info_list[0][0][5])/float(data_dict[link_euro_dollar]))*eurocard_coef)) + (float(income_expense_info_list[0][0][6])/float(data_dict[link_euro_rub])) + (float(income_expense_info_list[0][0][7])/float(data_dict[link_euro_rub])) + (float(income_expense_info_list[0][0][8])/float(data_dict[link_euro_bitc])) + (float(income_expense_info_list[0][0][9])/float(data_dict[link_euro_rub]))
-        print('result = ' + str(result_eur))
         if cur == 'eur':
             self.bot.send_message(message.chat.id, result_eur)
         elif cur == 'rub':

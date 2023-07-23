@@ -5,6 +5,7 @@ from Income_class import Income
 from Expense_class import Expense
 from Debts_loans_class import Debts_loans
 from income_expense_analysis import Income_expense_analysis
+from Payable_subscriptions_class import Payable_subscriptions
 
 #Code bellow wil launch the telegram bot
 BOT_TOKEN = config("BOT_TOKEN")
@@ -16,6 +17,7 @@ MY_USER_ID = int(config("MY_USER_ID"))
 income = Income(bot)
 expense = Expense(bot)
 debt_loan = Debts_loans(bot)
+payable_subscriptions = Payable_subscriptions(bot)
 income_expense_analysis = Income_expense_analysis(bot)
 
 # Define start menu options
@@ -33,14 +35,14 @@ start_menu.add(*options)
 def start_message(message):
     if message.chat.id == MY_USER_ID:
         markup = types.ReplyKeyboardMarkup(row_width=2, one_time_keyboard=True)
-        options = ['Income', 'Expense', 'Debts Loans', 'Overall assets value']
+        options = ['Income', 'Expense', 'Debts Loans', 'Payable subscriptions', 'Overall assets value']
         buttons = [types.KeyboardButton(option) for option in options]
         markup.add(*buttons)
         bot.send_message(message.chat.id, "Welcome ! This bot will help you to leash your Income, Expenses, Debts and Loans. Please choose an option:", reply_markup=markup)
         bot.register_next_step_handler(message, setup_income_expense_options)
 
 #Depends on selection in the step above, call the proper method with proper scenario
-@bot.message_handler(commands=['Income', 'Expense', 'Debts Loans', 'Overall assets value'])
+@bot.message_handler(commands=['Income', 'Expense', 'Debts Loans', 'Payable subscriptions', 'Overall assets value'])
 def setup_income_expense_options(message):
     user_data = message.text
     
@@ -54,6 +56,11 @@ def setup_income_expense_options(message):
     buttons_income_expense_analysis = [types.KeyboardButton(option) for option in options_income_expense_analysis]
     markup_income_expense_analysis.add(*buttons_income_expense_analysis )
 
+    markup_payable_subscriptions = types.ReplyKeyboardMarkup(row_width=1, one_time_keyboard=True)
+    options_payable_subscriptions  = ['Insert subscription', 'Show subscriptions', 'Delete subscription']
+    buttons_payable_subscriptions  = [types.KeyboardButton(option) for option in options_payable_subscriptions ]
+    markup_payable_subscriptions .add(*buttons_payable_subscriptions )
+
     #bot.send_message(message.chat.id, "Welcome ! This bot will help you to leash your Income, Expenses, Debts and Loans. Please choose an option:", reply_markup=markup)
     if user_data == 'Income':
         bot.register_next_step_handler(message,  income.info_message_income(message))    
@@ -62,13 +69,20 @@ def setup_income_expense_options(message):
     elif user_data == 'Debts Loans':
         bot.send_message(message.chat.id, "You chosen debts and Loans option", reply_markup=markup_debts_loans)
         bot.register_next_step_handler(message,  choose_debt_loan_options(message))
+    elif user_data == 'Payable subscriptions':
+        bot.send_message(message.chat.id, "You chosen Payable subscriptions option", reply_markup=markup_payable_subscriptions )
+        bot.register_next_step_handler(message,  payable_subscriptions_options)
     elif user_data == 'Overall assets value':
         bot.send_message(message.chat.id, "Choose currency for overall assets value", reply_markup=markup_income_expense_analysis)
         bot.register_next_step_handler(message,  choose_income_expense_analysis_cur)
-############
+
 @bot.message_handler(commands=['eur', '$', 'rub'])
 def choose_income_expense_analysis_cur(message):
     bot.register_next_step_handler(message, Income_expense_analysis.get_overall_account_sum(income_expense_analysis,message))    
+
+@bot.message_handler(commands=['Insert subscription', 'Show subscriptions', 'Delete subscription'])
+def payable_subscriptions_options(message):
+    bot.register_next_step_handler(message, Payable_subscriptions.process_chosen_option(payable_subscriptions, message))
   
 
 @bot.message_handler(commands=['Debts loans'])
