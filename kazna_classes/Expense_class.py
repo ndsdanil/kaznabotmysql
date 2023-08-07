@@ -20,7 +20,7 @@ class Expense:
     def set_expense_source(self, message):
         self.user_expense_source = message.text
         markup = types.ReplyKeyboardMarkup(row_width=2, one_time_keyboard=True)
-        options = ['cash_euro_with_me', 'cash_euro_not_with_me', 'cash_$_with_me', 'cash_$_not_with_me', 'card_euro', 'card_$', 'cash_(RUB)_not_with_me', 'card_(RUB)', 'bitcoin', 'shares(RUB)']
+        options = ['cash_euro_with_me', 'cash_euro_not_with_me', 'cash_$_with_me', 'cash_$_not_with_me', 'card_euro', 'card_$', 'cash_RUB_not_with_me', 'card_RUB', 'bitcoin', 'shares_RUB']
         buttons = [types.KeyboardButton(option) for option in options]
         markup.add(*buttons)
         self.bot.send_message(message.chat.id, "You set the expense source, please set the expense column", reply_markup=markup)
