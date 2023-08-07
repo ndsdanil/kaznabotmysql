@@ -2,7 +2,8 @@ import mysql.connector
 
 #class created to implement the all necessary interactions between app's and mysql's containers
 class Mysql_connector:
-
+    def __init__(self, bot):
+        self.bot = bot 
     #method to incert in mysql db information about new income or expense you need to set type parametr as 'Income' or 'Expense'. New value in the chosen column will be counted approprietly. 
     def insert_sql_query(type:str, source:str, column:str, value:str):
         cnx = mysql.connector.connect(
@@ -176,4 +177,47 @@ class Mysql_connector:
         cursor.execute('COMMIT;')
         cursor.close()
         cnx.close()
+
+
+    def set_overall_sum_query(result_eur:str, result_rub:str, result_dol:str):
+
+       
+        cnx = mysql.connector.connect(
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port='3306',  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password='12345',  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql'  # the database name defined in the docker-compose.yaml file
+        )
+
+        # Create a cursor object to execute SQL queries
+        cursor = cnx.cursor()
+        cursor.execute('SELECT id FROM kazna_mysql_table ORDER BY id DESC LIMIT 1;')
+        id = cursor.fetchall()[0][0]
+        print('Mysql connector res_eur = ' + str(result_eur) +', id = ' + str(id))
+        cursor.execute('UPDATE kazna_mysql_table SET overall_eur = ' + str(result_eur) + ', overall_rub = ' + str(result_rub) + ', overall_dol = ' + str(result_dol) + ' WHERE id = ' + str(id) + ';')
         
+        #Without commit our transations will be rollbacked from the database
+        query_commit = 'COMMIT;'
+        cursor.execute(query_commit)
+        # Close the cursor and the connection
+        cursor.close()
+        cnx.close()
+        
+    def get_last_overal_sum(self, message):
+        cnx = mysql.connector.connect(
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port='3306',  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password='12345',  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql'  # the database name defined in the docker-compose.yaml file
+        )
+
+        # Create a cursor object to execute SQL queries
+        cursor = cnx.cursor()
+        cursor.execute('SELECT overall_eur, overall_rub, overall_dol FROM kazna_mysql_table ORDER BY id DESC LIMIT 1;')
+        results = cursor.fetchall()
+        cursor.close()
+        cnx.close()
+        result = f'Overall sum in eur: {results[0][0]}\nOverall sum in rub: {results[0][1]}\nOverall sum in $: {results[0][2]}'
+        self.bot.send_message(message.chat.id, result)

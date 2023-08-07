@@ -1,5 +1,6 @@
 from mysql_connector import Mysql_connector
 from telebot import types
+from income_expense_analysis import Income_expense_analysis
 
 #This class represents Expense scenario, all these methods - the steps to get the Expense information inserted in the telegram bot and set it into mysql database.
 class Expense:
@@ -28,5 +29,6 @@ class Expense:
     def set_expense_column(self, message):
         self.user_expense_column = message.text
         Mysql_connector.insert_sql_query('Expense', self.user_expense_source, self.user_expense_column, self.user_expense_number)
+        Income_expense_analysis.get_overall_account_sum()
         self.bot.send_message(message.chat.id, "You inserted expense entry succesfully ")
         
