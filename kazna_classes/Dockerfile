@@ -13,6 +13,10 @@ COPY mysql_connector.py ./
 COPY income_expense_analysis.py ./
 COPY Payable_subscriptions_class.py ./
 COPY .env ./
+#ML Time series model and plots
+COPY db_connector.py ./
+COPY plots_class.py ./
+COPY prediction_class.py ./
 
 # Install necessary dependencies
 RUN apt-get update
@@ -31,4 +35,13 @@ RUN pip install websocket-client
 RUN pip install charset-normalizer 
 RUN pip install setuptools 
 RUN pip install beautifulsoup4
+#ML Time series model and plots dependencies
+RUN pip install pandas
+RUN pip install sqlalchemy
+RUN pip install pymysql
+RUN pip install xgboost
+RUN pip install matplotlib
+RUN pip install seaborn
+RUN pip install scikit-learn
+RUN pip install cryptography
 

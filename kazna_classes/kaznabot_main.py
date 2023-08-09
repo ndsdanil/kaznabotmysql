@@ -7,6 +7,8 @@ from Debts_loans_class import Debts_loans
 from income_expense_analysis import Income_expense_analysis
 from Payable_subscriptions_class import Payable_subscriptions
 from mysql_connector import Mysql_connector
+from prediction_class import Prediction
+from plots_class import Plots
 
 #Code bellow wil launch the telegram bot
 BOT_TOKEN = config("BOT_TOKEN")
@@ -21,6 +23,9 @@ debt_loan = Debts_loans(bot)
 payable_subscriptions = Payable_subscriptions(bot)
 income_expense_analysis = Income_expense_analysis(bot)
 mysql_connector = Mysql_connector(bot)
+prediction = Prediction(bot)
+plots = Plots(bot)
+
 
 # Define start menu options
 option_income = types.KeyboardButton('Income')
@@ -37,14 +42,14 @@ start_menu.add(*options)
 def start_message(message):
     if message.chat.id == MY_USER_ID:
         markup = types.ReplyKeyboardMarkup(row_width=2, one_time_keyboard=True)
-        options = ['Income', 'Expense', 'Debts Loans', 'Payable subscriptions', 'Overall assets value']
+        options = ['Income', 'Expense', 'Debts Loans', 'Payable subscriptions', 'Overall assets estimation']
         buttons = [types.KeyboardButton(option) for option in options]
         markup.add(*buttons)
         bot.send_message(message.chat.id, "Welcome ! This bot will help you to leash your Income, Expenses, Debts and Loans. Please choose an option:", reply_markup=markup)
         bot.register_next_step_handler(message, setup_income_expense_options)
 
 #Depends on selection in the step above, call the proper method with proper scenario
-@bot.message_handler(commands=['Income', 'Expense', 'Debts Loans', 'Payable subscriptions', 'Overall assets value'])
+@bot.message_handler(commands=['Income', 'Expense', 'Debts Loans', 'Payable subscriptions', 'Overall assets estimation'])
 def setup_income_expense_options(message):
     user_data = message.text
     
@@ -69,9 +74,11 @@ def setup_income_expense_options(message):
     elif user_data == 'Payable subscriptions':
         bot.send_message(message.chat.id, "You chosen Payable subscriptions option", reply_markup=markup_payable_subscriptions )
         bot.register_next_step_handler(message,  payable_subscriptions_options)
-    elif user_data == 'Overall assets value':
+    elif user_data == 'Overall assets estimation':
         Mysql_connector.get_last_overal_sum(mysql_connector, message)
-        #bot.register_next_step_handler(message,  choose_income_expense_analysis_cur)
+        Prediction.make_week_prediction(prediction, MY_USER_ID)
+        Plots.make_plots(plots, MY_USER_ID)
+        
 
 #@bot.message_handler(commands=['eur', '$', 'rub'])
 #def choose_income_expense_analysis_cur(message):
