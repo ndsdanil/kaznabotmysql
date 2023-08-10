@@ -72,3 +72,4 @@ class Plots:
         self.bot.send_photo(MY_USER_ID , photo=open('all_incomess_month.png', 'rb'))
         self.bot.send_photo(MY_USER_ID , photo=open('expenses_types_month.png', 'rb'))
         self.bot.send_photo(MY_USER_ID , photo=open('income_types_month.png', 'rb'))
+       
