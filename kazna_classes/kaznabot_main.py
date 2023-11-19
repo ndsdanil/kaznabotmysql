@@ -76,8 +76,9 @@ def setup_income_expense_options(message):
         bot.register_next_step_handler(message,  payable_subscriptions_options)
     elif user_data == 'Overall assets estimation':
         Mysql_connector.get_last_overal_sum(mysql_connector, message)
-        Prediction.make_week_prediction(prediction, MY_USER_ID)
         Plots.make_plots(plots, MY_USER_ID)
+        Prediction.make_week_prediction(prediction, MY_USER_ID)
+
         
 
 #@bot.message_handler(commands=['eur', '$', 'rub'])

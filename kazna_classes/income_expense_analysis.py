@@ -12,7 +12,7 @@ class Income_expense_analysis:
         #count sum in rub, eur, $, show grafics for income expense, show info ang grafics about debt
         options = ['cash_euro_with_me(1), cash_euro_not_with_me(2), cash_$_with_me(3), cash_$_not_with_me(4), card_euro(5), card_$(6), cash_RUB_not_with_me(7), card_RUB(8), bitcoin(9), shares_RUB(10)']
         income_expense_info_list = list()
-        headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'}
+        headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0'}
 
         link_euro_dollar = 'https://www.google.com/finance/quote/EUR-USD?sa=X&ved=2ahUKEwi2t4iW3cL9AhVUgv0HHQ7cD7oQmY0JegQIBhAd'
         link_euro_bitc = 'https://www.google.com/finance/quote/EUR-BTC?sa=X&ved=2ahUKEwic0PLF5ML9AhUegP0HHQCBC9MQ-fUHegQIHRAf'
@@ -43,12 +43,16 @@ class Income_expense_analysis:
         # 'euro_dollar':AA3, 'euro_bitc':AA2, 'euro_rub':AA5}
 
         #H2+I2+(J2/AA$3)+(K2/AA$3)+(L2-(L2*AA$4))+(M2/AA$3-((M2/AA$3)*AA$4))+(N2/AA$5)+(O2/AA$5)+(P2/AA$2)+(Q2/AA$5)
+
+
+        print(income_expense_info_list[0][0])
+        print(income_expense_info_list[0][0][0])
        
         result_eur = income_expense_info_list[0][0][0] + income_expense_info_list[0][0][1] + (float(income_expense_info_list[0][0][2])/float(data_dict[link_euro_dollar])) + (float(income_expense_info_list[0][0][3])/float(data_dict[link_euro_dollar])) + (income_expense_info_list[0][0][4] - (income_expense_info_list[0][0][4]* eurocard_coef)) + (float(income_expense_info_list[0][0][5])/float(data_dict[link_euro_dollar]) - ((float(income_expense_info_list[0][0][5])/float(data_dict[link_euro_dollar]))*eurocard_coef)) + (float(income_expense_info_list[0][0][6])/float(data_dict[link_euro_rub])) + (float(income_expense_info_list[0][0][7])/float(data_dict[link_euro_rub])) + (float(income_expense_info_list[0][0][8])/float(data_dict[link_euro_bitc])) + (float(income_expense_info_list[0][0][9])/float(data_dict[link_euro_rub]))
-        result_eur = round(result_eur, 2)
-        result_rub = round(result_eur * float(data_dict[link_euro_rub]), 2)
-        result_dol = round(result_eur * float(data_dict[link_euro_dollar]),2)
-        print('analyzis res_eur = ' + str(result_eur))
+        result_eur = int(result_eur)
+        result_rub = int(result_eur * float(data_dict[link_euro_rub]))
+        result_dol = int(result_eur * float(data_dict[link_euro_dollar]))
+        print('analyzis res_eur = ' + str(result_eur) + ', ' + str(result_rub) + ', ' +str(result_dol))
         Mysql_connector.set_overall_sum_query(result_eur, result_rub, result_dol)
 
     

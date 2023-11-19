@@ -31,4 +31,5 @@ class Expense:
         Mysql_connector.insert_sql_query('Expense', self.user_expense_source, self.user_expense_column, self.user_expense_number)
         Income_expense_analysis.get_overall_account_sum()
         self.bot.send_message(message.chat.id, "You inserted expense entry succesfully ")
+        self.bot.send_message(message.chat.id, '/start') 
         

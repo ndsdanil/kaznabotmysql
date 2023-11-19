@@ -126,8 +126,8 @@ class Mysql_connector:
         # Get values from the last inserted row to be able to count the new columns values based on new incertion. If there is no previous row, colums will get the 0 values
         cursor.execute('SELECT cash_euro_with_me, cash_euro_not_with_me, cash_$_with_me, cash_$_not_with_me, card_euro, card_$, cash_RUB_not_with_me, card_RUB, bitcoin, shares_RUB from kazna_mysql_table ORDER BY id DESC LIMIT 1;')
         income_expense_info_list.append(cursor.fetchall())
-        cursor.execute('SELECT date, cash_euro_with_me, cash_euro_not_with_me, cash_$_with_me, cash_$_not_with_me, card_euro, card_$, cash_RUB_not_with_me, card_RUB, bitcoin, shares_RUB from kazna_mysql_table ORDER BY id DESC;')
-        income_expense_info_list.append(cursor.fetchall())
+        #cursor.execute('SELECT date, cash_euro_with_me, cash_euro_not_with_me, cash_$_with_me, cash_$_not_with_me, card_euro, card_$, cash_RUB_not_with_me, card_RUB, bitcoin, shares_RUB from kazna_mysql_table ORDER BY id DESC;')
+        #income_expense_info_list.append(cursor.fetchall())
         cursor.close()
         cnx.close()
         return income_expense_info_list
@@ -215,9 +215,9 @@ class Mysql_connector:
 
         # Create a cursor object to execute SQL queries
         cursor = cnx.cursor()
-        cursor.execute('SELECT overall_eur, overall_rub, overall_dol FROM kazna_mysql_table ORDER BY id DESC LIMIT 1;')
+        cursor.execute('SELECT overall_eur, overall_rub, overall_dol, cash_euro_with_me, cash_euro_not_with_me, cash_$_with_me, cash_$_not_with_me, card_euro, card_$, cash_RUB_not_with_me, card_RUB, bitcoin, shares_RUB FROM kazna_mysql_table ORDER BY id DESC LIMIT 1;')
         results = cursor.fetchall()
         cursor.close()
         cnx.close()
-        result = f'Overall sum in eur: {results[0][0]}\nOverall sum in rub: {results[0][1]}\nOverall sum in $: {results[0][2]}'
+        result = f'Overall sum in eur: {results[0][0]}\nOverall sum in rub: {results[0][1]}\nOverall sum in $: {results[0][2]}\n\nEuro cash with me: {results[0][3]}\nEuro cash not with me: {results[0][4]}\nCash $ with me: {results[0][5]}\nCash $ not with me: {results[0][6]}\nCard euro: {results[0][7]}\nCard $: {results[0][8]}\nCash RUB not with me: {results[0][9]}\nCard RUB: {results[0][10]}\nBitcoin: {results[0][11]}\nShares in RUB: {results[0][12]}\n'
         self.bot.send_message(message.chat.id, result)

@@ -16,9 +16,15 @@ Released features:
 -ability to insert, show, delete the debts and loans.
 -ability to get the overall summ in euro, rub, dollars based on the actual coeficients.  
 -ability to add, show, delete payable subscriptions to not forget about it. 
+-ability to get the analisys of income and expenses (via plots). 
+-ability to get the prediction of income, expenses using Machine Learning time series.
 
-Next features: 
-1.ability to get the analisys of income and expenses. 
-2.ability to get the prediction of income, expenses using Machine Learning time series.
-
+Useful docker comands:
+docker exec -it bc7401fcc871 mysql -u root -p  - enter in mysql database in docker:    
+docker ps   - show docker containers
+docker container ls - show containers
+docker-compose up  
+docker stop $(docker ps -aq)
+docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker-compose build && docker-compose up   
+docker system prune -a  -clear after docker
   

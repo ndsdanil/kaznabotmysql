@@ -30,7 +30,8 @@ class Income:
         self.user_income_column = message.text
         Mysql_connector.insert_sql_query('Income', self.user_income_source, self.user_income_column, self.user_income_number)
         Income_expense_analysis.get_overall_account_sum()
-        self.bot.send_message(message.chat.id, "You inserted income entry succesfully ")   
+        self.bot.send_message(message.chat.id, "You inserted income entry succesfully ")  
+        self.bot.send_message(message.chat.id, '/start')  
         
         
 
