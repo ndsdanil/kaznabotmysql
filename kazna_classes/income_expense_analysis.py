@@ -2,12 +2,12 @@
 import requests
 from mysql_connector import Mysql_connector
 from telebot import types
-from kazna_classes.exch_rates_coingeko import get_exchange_rates
+from exch_rates_coingeko import Get_exchange_rates
 
 class Income_expense_analysis:
     def __init__(self, bot):
         self.bot = bot 
-
+        
     def get_overall_account_sum():
         #count sum in rub, eur, $, show grafics for income expense, show info ang grafics about debt
         options = ['cash_euro_with_me(1), cash_euro_not_with_me(2), cash_$_with_me(3), cash_$_not_with_me(4), card_euro(5), card_$(6), cash_RUB_not_with_me(7), card_RUB(8), bitcoin(9), shares_RUB(10)']
@@ -16,8 +16,8 @@ class Income_expense_analysis:
         link_euro_dollar = 'euro_dollar'
         link_euro_bitc = 'euro_bitc'
         link_euro_rub = 'euro_rub'
-
-        cur_list = get_exchange_rates()
+        exchange_rates_class = Get_exchange_rates()
+        cur_list = exchange_rates_class.get_exchange_rates()
 
         eurocard_coef = 0.02
         euro_bitc_value = cur_list[0]
