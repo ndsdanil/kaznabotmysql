@@ -9,6 +9,7 @@ from Payable_subscriptions_class import Payable_subscriptions
 from mysql_connector import Mysql_connector
 from prediction_class import Prediction
 from plots_class import Plots
+from feature_toggles import *
 
 #Code bellow wil launch the telegram bot
 BOT_TOKEN = config("BOT_TOKEN")
@@ -77,7 +78,9 @@ def setup_income_expense_options(message):
     elif user_data == 'Overall assets estimation':
         Mysql_connector.get_last_overal_sum(mysql_connector, message)
         Plots.make_plots(plots, MY_USER_ID)
-        Prediction.make_week_prediction(prediction, MY_USER_ID)
+        #I use feature toggle to enable or disable ML prediction. It can be disabled for small servers.
+        if make_ml_prediction:
+            Prediction.make_week_prediction(prediction, MY_USER_ID)
 
         
 

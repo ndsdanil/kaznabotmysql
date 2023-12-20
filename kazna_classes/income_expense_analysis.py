@@ -3,6 +3,8 @@ import requests
 from mysql_connector import Mysql_connector
 from telebot import types
 from exch_rates_coingeko import Get_exchange_rates
+import json
+from decimal import Decimal
 
 class Income_expense_analysis:
     def __init__(self, bot):
@@ -24,10 +26,20 @@ class Income_expense_analysis:
         euro_dollar_value = cur_list[1]
         euro_rub_value = cur_list[2]
 
+        # Custom JSON encoder for Decimal objects
+        class DecimalEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, Decimal):
+                    return str(obj)
+                return super(DecimalEncoder, self).default(obj)        
+
         data_dict = {
             link_euro_dollar :euro_dollar_value,
-            link_euro_bitc:euro_bitc_value,
-            link_euro_rub:euro_rub_value,}
+            link_euro_bitc : Decimal(euro_bitc_value),
+            link_euro_rub :euro_rub_value,}
+        
+        with open('exchange_rates.json', 'w') as file:
+            json.dump(data_dict, file, cls=DecimalEncoder)
             
         income_expense_info_list  = Mysql_connector.get_income_expense_info_query()
 

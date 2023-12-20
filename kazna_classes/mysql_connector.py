@@ -32,11 +32,11 @@ class Mysql_connector:
         cursor.execute('(SELECT '+ str(column) + ' FROM kazna_mysql_table WHERE id ='+ str(id) + ');')
         if type == 'Income':
             target_column_value = str(cursor.fetchall()[0][0] + float(value))  
-            query_update = 'UPDATE kazna_mysql_table SET Income = '+ str(value) +', Source = \'' + str(source) + '\', ' + str(column) + '=' + target_column_value + ' WHERE id ='+ str(id) +';'
+            query_update = 'UPDATE kazna_mysql_table SET Income = '+ str(value) + ', Income_Expense_Column = \'' + str(column) + '\', Source = \'' + str(source) + '\', ' + str(column) + '=' + target_column_value + ' WHERE id ='+ str(id) +';'
             cursor.execute(query_update)
         elif type == 'Expense':
             target_column_value = str(cursor.fetchall()[0][0] - float(value))
-            query_update = 'UPDATE kazna_mysql_table SET Expense = '+ str(value) +', Source = \'' + str(source) + '\', ' + str(column) + '=' + target_column_value + ' WHERE id ='+ str(id) +';'
+            query_update = 'UPDATE kazna_mysql_table SET Expense = '+ str(value) + ', Income_Expense_Column = \'' + str(column) + '\', Source = \'' + str(source) + '\', ' + str(column) + '=' + target_column_value + ' WHERE id ='+ str(id) +';'
             cursor.execute(query_update)
         else:
             print('Function has wrong type parametr')

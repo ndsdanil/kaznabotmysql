@@ -39,9 +39,9 @@ RUN pip install beautifulsoup4
 RUN pip install pandas
 RUN pip install sqlalchemy
 RUN pip install pymysql
-RUN pip install xgboost
+#RUN pip install xgboost
 RUN pip install matplotlib
 RUN pip install seaborn
-RUN pip install scikit-learn
+#RUN pip install scikit-learn
 RUN pip install cryptography
 

@@ -1,9 +1,9 @@
 from db_connector import db_connector
 import pandas as pd
 import numpy as np
-import xgboost as xgb
-from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import TimeSeriesSplit
+#import xgboost as xgb
+#from sklearn.metrics import mean_squared_error
+#from sklearn.model_selection import TimeSeriesSplit
 from telebot import types
 import matplotlib.pyplot as plt
 
