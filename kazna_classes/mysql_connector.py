@@ -6,20 +6,14 @@ class Mysql_connector:
     def __init__(self, bot):
         self.bot = bot 
 
-    host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
-    port=config("DB_PORT"),  # the port defined in the docker-compose.yaml file
-    user='root',  # default username for the MySQL container
-    password=config("DB_PASSWD"),  # the password defined in the docker-compose.yaml file
-    database='kazna_bot_mysql'  # the database name defined in the docker-compose.yaml file
-
     #method to incert in mysql db information about new income or expense you need to set type parametr as 'Income' or 'Expense'. New value in the chosen column will be counted approprietly. 
     def insert_sql_query(type:str, source:str, column:str, value:str):
         cnx = mysql.connector.connect(
-            Mysql_connector.host,  # assuming the MySQL container is running on the separate docker container with mysql image
-            Mysql_connector.port,  # the port defined in the docker-compose.yaml file
-            Mysql_connector.user,  # default username for the MySQL container
-            Mysql_connector.password,  # the password defined in the docker-compose.yaml file
-            Mysql_connector.database  # the database name defined in the docker-compose.yaml file
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port=str(config("DB_PORT")),  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password=str(config("DB_PASSWD")),  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql' # the database name defined in the docker-compose.yaml file
         )
 
         # Create a cursor object to execute SQL queries
@@ -60,11 +54,11 @@ class Mysql_connector:
         
     def get_debt_loan_info_from_db(debt_or_loan_type:str):
         cnx = mysql.connector.connect(
-            Mysql_connector.host,  # assuming the MySQL container is running on the separate docker container with mysql image
-            Mysql_connector.port,  # the port defined in the docker-compose.yaml file
-            Mysql_connector.user,  # default username for the MySQL container
-            Mysql_connector.password,  # the password defined in the docker-compose.yaml file
-            Mysql_connector.database  # the database name defined in the docker-compose.yaml file
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port=config("DB_PORT"),  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password=config("DB_PASSWD"),  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql' # the database name defined in the docker-compose.yaml file
         )
 
         # Create a cursor object to execute SQL queries
@@ -85,11 +79,11 @@ class Mysql_connector:
             details_or_sum = '\''+ str(details_or_sum)+ '\''
 
         cnx = mysql.connector.connect(
-            Mysql_connector.host,  # assuming the MySQL container is running on the separate docker container with mysql image
-            Mysql_connector.port,  # the port defined in the docker-compose.yaml file
-            Mysql_connector.user,  # default username for the MySQL container
-            Mysql_connector.password,  # the password defined in the docker-compose.yaml file
-            Mysql_connector.database  # the database name defined in the docker-compose.yaml file
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port=config("DB_PORT"),  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password=config("DB_PASSWD"),  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql' # the database name defined in the docker-compose.yaml file
         )
 
         # Create a cursor object to execute SQL queries
@@ -102,11 +96,11 @@ class Mysql_connector:
 
     def delete_loan_debt_by_id(id:str):
         cnx = mysql.connector.connect(
-            Mysql_connector.host,  # assuming the MySQL container is running on the separate docker container with mysql image
-            Mysql_connector.port,  # the port defined in the docker-compose.yaml file
-            Mysql_connector.user,  # default username for the MySQL container
-            Mysql_connector.password,  # the password defined in the docker-compose.yaml file
-            Mysql_connector.database  # the database name defined in the docker-compose.yaml file
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port=config("DB_PORT"),  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password=config("DB_PASSWD"),  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql' # the database name defined in the docker-compose.yaml file
         )
 
         # Create a cursor object to execute SQL queries
@@ -122,11 +116,11 @@ class Mysql_connector:
 
     def get_income_expense_info_query():
         cnx = mysql.connector.connect(
-            Mysql_connector.host,  # assuming the MySQL container is running on the separate docker container with mysql image
-            Mysql_connector.port,  # the port defined in the docker-compose.yaml file
-            Mysql_connector.user,  # default username for the MySQL container
-            Mysql_connector.password,  # the password defined in the docker-compose.yaml file
-            Mysql_connector.database  # the database name defined in the docker-compose.yaml file
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port=config("DB_PORT"),  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password=config("DB_PASSWD"),  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql' # the database name defined in the docker-compose.yaml file
         )
         income_expense_info_list = list()
         # Create a cursor object to execute SQL queries
@@ -145,11 +139,11 @@ class Mysql_connector:
 
     def set_subscription(subscription_name, subscription_sum, subscription_cur):
         cnx = mysql.connector.connect(
-            Mysql_connector.host,  # assuming the MySQL container is running on the separate docker container with mysql image
-            Mysql_connector.port,  # the port defined in the docker-compose.yaml file
-            Mysql_connector.user,  # default username for the MySQL container
-            Mysql_connector.password,  # the password defined in the docker-compose.yaml file
-            Mysql_connector.database  # the database name defined in the docker-compose.yaml file
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port=config("DB_PORT"),  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password=config("DB_PASSWD"),  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql' # the database name defined in the docker-compose.yaml file
         )
         cursor = cnx.cursor()
         cursor.execute('INSERT INTO payable_subscriptions_table (Subscription_name, Price, Currency) VALUES (\''+ str(subscription_name) + '\', \'' + str(subscription_sum) + '\', \'' + str(subscription_cur) +'\');')
@@ -159,11 +153,11 @@ class Mysql_connector:
 
     def get_subscriptions():
         cnx = mysql.connector.connect(
-            Mysql_connector.host,  # assuming the MySQL container is running on the separate docker container with mysql image
-            Mysql_connector.port,  # the port defined in the docker-compose.yaml file
-            Mysql_connector.user,  # default username for the MySQL container
-            Mysql_connector.password,  # the password defined in the docker-compose.yaml file
-            Mysql_connector.database  # the database name defined in the docker-compose.yaml file
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port=config("DB_PORT"),  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password=config("DB_PASSWD"),  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql' # the database name defined in the docker-compose.yaml file
         )
         cursor = cnx.cursor()
         cursor.execute('SELECT id, Subscription_name, Price, Currency FROM payable_subscriptions_table;')
@@ -174,11 +168,11 @@ class Mysql_connector:
 
     def del_subscriptions(id):
         cnx = mysql.connector.connect(
-            Mysql_connector.host,  # assuming the MySQL container is running on the separate docker container with mysql image
-            Mysql_connector.port,  # the port defined in the docker-compose.yaml file
-            Mysql_connector.user,  # default username for the MySQL container
-            Mysql_connector.password,  # the password defined in the docker-compose.yaml file
-            Mysql_connector.database  # the database name defined in the docker-compose.yaml file
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port=config("DB_PORT"),  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password=config("DB_PASSWD"),  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql' # the database name defined in the docker-compose.yaml file
         )
         cursor = cnx.cursor()
         cursor.execute('DELETE FROM payable_subscriptions_table WHERE id =' + id + ';')
@@ -191,11 +185,11 @@ class Mysql_connector:
 
        
         cnx = mysql.connector.connect(
-            Mysql_connector.host,  # assuming the MySQL container is running on the separate docker container with mysql image
-            Mysql_connector.port,  # the port defined in the docker-compose.yaml file
-            Mysql_connector.user,  # default username for the MySQL container
-            Mysql_connector.password,  # the password defined in the docker-compose.yaml file
-            Mysql_connector.database  # the database name defined in the docker-compose.yaml file
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port=config("DB_PORT"),  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password=config("DB_PASSWD"),  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql' # the database name defined in the docker-compose.yaml file
         )
 
         # Create a cursor object to execute SQL queries
@@ -214,11 +208,11 @@ class Mysql_connector:
         
     def get_last_overal_sum(self, message):
         cnx = mysql.connector.connect(
-            Mysql_connector.host,  # assuming the MySQL container is running on the separate docker container with mysql image
-            Mysql_connector.port,  # the port defined in the docker-compose.yaml file
-            Mysql_connector.user,  # default username for the MySQL container
-            Mysql_connector.password,  # the password defined in the docker-compose.yaml file
-            Mysql_connector.database  # the database name defined in the docker-compose.yaml file
+            host='mysql',  # assuming the MySQL container is running on the separate docker container with mysql image
+            port=config("DB_PORT"),  # the port defined in the docker-compose.yaml file
+            user='root',  # default username for the MySQL container
+            password=config("DB_PASSWD"),  # the password defined in the docker-compose.yaml file
+            database='kazna_bot_mysql' # the database name defined in the docker-compose.yaml file
         )
 
         # Create a cursor object to execute SQL queries

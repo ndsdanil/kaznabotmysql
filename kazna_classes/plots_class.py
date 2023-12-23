@@ -36,11 +36,11 @@ class Plots:
         btc_list = ['bitcoin']
 
         if df['Income_Expense_Column'] in dol_list:
-            return df['Expense'] / exchange_rates['euro_dollar']
+            return df['Expense'] / float(exchange_rates['euro_dollar'])
         if df['Income_Expense_Column'] in rub_list:
-            return df['Expense'] / exchange_rates['euro_rub']
+            return df['Expense'] / float(exchange_rates['euro_rub'])
         if df['Income_Expense_Column'] in btc_list:
-            return df['Expense'] / exchange_rates['euro_bitc']
+            return df['Expense'] / float(exchange_rates['euro_bitc'])
         else:
             return df['Expense'] 
     

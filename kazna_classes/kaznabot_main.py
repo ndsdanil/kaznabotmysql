@@ -81,6 +81,7 @@ def setup_income_expense_options(message):
         #I use feature toggle to enable or disable ML prediction. It can be disabled for small servers.
         if make_ml_prediction:
             Prediction.make_week_prediction(prediction, MY_USER_ID)
+        bot.send_message(message.chat.id, "/start")
 
         
 
