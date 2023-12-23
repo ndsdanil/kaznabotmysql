@@ -2,12 +2,15 @@ version: '3'
 services:
   mysql:
     image: mysql
-    restart: always
+    env_file:
+     - ./kazna_classes/.env
+    
     environment:
-      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWD}
       MYSQL_DATABASE: kazna_bot_mysql
+    restart: always
     ports:
-      - 3306:3306
+      - ${DB_PORT}:${DB_PORT}
     volumes:
       - ./data:/var/lib/mysql
       - .docker/setup.sql:/docker-entrypoint-initdb.d/setup.sql
