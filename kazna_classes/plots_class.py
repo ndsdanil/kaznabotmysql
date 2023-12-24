@@ -82,6 +82,7 @@ class Plots:
         plt.legend(df_monthexppie.index, bbox_to_anchor=(1,0), loc="lower right", 
                                 bbox_transform=plt.gcf().transFigure, labels = labels)
         plt.savefig('expenses_types_month.png')
+        df_monthexppie = df_monthexppie.sort_values(by='eq_expense', ascending=False)
 
         
 

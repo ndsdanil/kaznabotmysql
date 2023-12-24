@@ -1,3 +1,8 @@
 __pycache__
 kazna_classes/.env
 data
+kazna_classes/exchange_rates.json
+expenses_types_month.png
+income_types_month.png
+overall_assets_sum_month.png
+overall_assets_sum_three_months.png
