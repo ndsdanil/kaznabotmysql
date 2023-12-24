@@ -103,5 +103,6 @@ class Plots:
         self.bot.send_photo(MY_USER_ID , photo=open('overall_assets_sum_month.png', 'rb'))
         self.bot.send_photo(MY_USER_ID , photo=open('expenses_types_month.png', 'rb'))
         #self.bot.send_photo(MY_USER_ID , photo=open('income_types_month.png', 'rb'))
+        self.bot.send_message(MY_USER_ID , str(df_monthexppie)) 
 
        
