@@ -76,30 +76,13 @@ class Plots:
         df['month'] = df['date'].dt.to_period('M')  # Create a new column for month
         df = df[~df['Source'].str.contains('Transfer|transfer', case=False)]
         grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
-        ax = grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
+        grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
         plt.title('Total Expense by Month and Source')
-        plt.yticks(range(0, int(grouped.max().max())+1, 100))
-
-        #Create pie chart of euro type of expense
-        plt.figure(figsize = (15,10))
-        plt.title('Types of expense (month)')
-        df_monthexppie = df_month
-        df_monthexppie = df_monthexppie[~df_monthexppie['Source'].str.contains('Transfer|transfer', case=False)]
-        df_monthexppie = df_monthexppie[['Source','eq_expense']].groupby(['Source']).sum()
-        print(df_monthexppie)
-        total_size = sum(df_monthexppie['eq_expense'])
-        percentages = [(size / total_size) * 100 for size in df_monthexppie['eq_expense']]
-
-        plt.pie(df_monthexppie['eq_expense'], labels = df_monthexppie.index, textprops={'fontsize': 10}) 
-        labels = ['%s, %1.1f %%' % (l, s) for l, s in zip(df_monthexppie.index, percentages )]
-        plt.legend(df_monthexppie.index, bbox_to_anchor=(1,0), loc="lower right", 
-                                bbox_transform=plt.gcf().transFigure, labels = labels)
-        plt.savefig('expenses_types_month.png')
-        df_monthexppie = df_monthexppie.sort_values(by='eq_expense', ascending=False)
-        # Create the list of sources for the last month
+        plt.yticks(range(0, int(grouped.max().max())+1, 500))
         
+        # Create the list of expenses for the current month
         # Get the current month and year
         current_month = datetime.now().month
         current_year = datetime.now().year
