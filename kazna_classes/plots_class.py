@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import json
 from decimal import Decimal
+from datetime import datetime
 
 
 
@@ -79,14 +80,7 @@ class Plots:
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
         plt.title('Total Expense by Month and Source')
-
-        # Annotating each bar with its corresponding y-axis value (total expense)
-        for p in ax.patches:
-            ax.annotate(str(round(p.get_height(), 2)), (p.get_x() + p.get_width() / 2., p.get_height()),
-                        ha='center', va='center', xytext=(0, 10), textcoords='offset points')
-        plt.legend(title='Source', bbox_to_anchor = (1.05,1), loc = 'upper left')
-        plt.savefig('expenses_barplot_month.png')
-
+        plt.yticks(range(0, int(grouped.max().max())+1, 100))
 
         #Create pie chart of euro type of expense
         plt.figure(figsize = (15,10))
@@ -104,28 +98,23 @@ class Plots:
                                 bbox_transform=plt.gcf().transFigure, labels = labels)
         plt.savefig('expenses_types_month.png')
         df_monthexppie = df_monthexppie.sort_values(by='eq_expense', ascending=False)
-
+        # Create the list of sources for the last month
+        
+        # Get the current month and year
+        current_month = datetime.now().month
+        current_year = datetime.now().year
+        # Filter the DataFrame for rows where the 'date' column corresponds to the current month
+        month_expense_list = df[(df['date'].dt.month == current_month) & (df['date'].dt.year == current_year)]
+        month_expense_list = month_expense_list[~month_expense_list['Source'].str.contains('Transfer|transfer', case=False)]
+        month_expense_list = month_expense_list[['Source','eq_expense']].groupby(['Source']).sum()
+        month_expense_list = month_expense_list.sort_values(by='eq_expense', ascending=False)
         
 
-        #Create pie chart of type of income
-        #plt.figure(figsize = (15,10))
-        #plt.title('Types of income (month)')
-        #df_monthexppie = df_month.copy
-        #df_monthincpie = df_monthexppie[['Source','Income']].groupby(['Source']).sum()
-        #total_size = sum(df_monthincpie['Income'])
-        #percentages = [(size / total_size) * 100 for size in df_monthincpie['Income']]
-        #plt.pie(df_monthincpie['Income'], labels = df_monthincpie.index, textprops={'fontsize': 10}) 
-        #labels = ['%s, %1.1f %%' % (l, s) for l, s in zip(df_monthincpie.index, percentages )]
-        #plt.legend(df_monthincpie.index, bbox_to_anchor=(1,0), loc="lower right", 
-        #                        bbox_transform=plt.gcf().transFigure, labels = labels)
-        #plt.savefig('income_types_month.png')
 
         #Send charts in telegram 
         self.bot.send_photo(MY_USER_ID , photo=open('overall_assets_sum_three_months.png', 'rb'))
         self.bot.send_photo(MY_USER_ID , photo=open('overall_assets_sum_month.png', 'rb'))
         self.bot.send_photo(MY_USER_ID , photo=open('expenses_barplot_month.png', 'rb'))
-        self.bot.send_photo(MY_USER_ID , photo=open('expenses_types_month.png', 'rb'))
-        #self.bot.send_photo(MY_USER_ID , photo=open('income_types_month.png', 'rb'))
-        self.bot.send_message(MY_USER_ID , str(df_monthexppie)) 
+        self.bot.send_message(MY_USER_ID , str(month_expense_list)) 
 
        
