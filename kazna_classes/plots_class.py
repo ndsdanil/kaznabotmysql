@@ -75,10 +75,15 @@ class Plots:
         df['month'] = df['date'].dt.to_period('M')  # Create a new column for month
         df = df[~df['Source'].str.contains('Transfer|transfer', case=False)]
         grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
-        grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
+        ax = grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
         plt.title('Total Expense by Month and Source')
+
+        # Annotating each bar with its corresponding y-axis value (total expense)
+        for p in ax.patches:
+            ax.annotate(str(round(p.get_height(), 2)), (p.get_x() + p.get_width() / 2., p.get_height()),
+                        ha='center', va='center', xytext=(0, 10), textcoords='offset points')
         plt.legend(title='Source', bbox_to_anchor = (1.05,1), loc = 'upper left')
         plt.savefig('expenses_barplot_month.png')
 
