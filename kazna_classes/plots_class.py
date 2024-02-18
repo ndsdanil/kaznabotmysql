@@ -45,7 +45,7 @@ class Plots:
             return df['Expense'] 
     
     def make_plots(self, MY_USER_ID):
-        df = db_connector.get_three_months_dataframe_query()
+        df = db_connector.get_five_months_dataframe_query()
         df.set_index('date', inplace=True, drop=False)
         one_month_before = str(df.index.max() - pd.Timedelta(days=30))
         df_month = df[df.index > one_month_before ]
@@ -53,7 +53,7 @@ class Plots:
 
         #Create line plot of the overall assets sum in euro for month
         plt.figure(figsize = (15, 5))
-        plt.title('Overall assets sum in euro (3 months)')
+        plt.title('Overall assets sum in euro (5 months)')
         sns.lineplot(data = df['overall_eur'], label ='overall sum in eur')
         plt.xlabel('date')
         plt.grid()
@@ -74,12 +74,12 @@ class Plots:
         df["eq_expense"] = df.apply(self.set_euro_value_for_expense, axis = 1)
         df['month'] = df['date'].dt.to_period('M')  # Create a new column for month
         grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
-        grouped.plot(kind='bar', stacked=True, figsize=(10, 6))
+        grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
         plt.title('Total Expense by Month and Source')
-        plt.legend(title='Source')
-        plt.savefig('expenses_types_month.png')
+        plt.legend(title='Source', bbox_to_anchor = (1.05,1), loc = 'upper left')
+        plt.savefig('expenses_barplot_month.png')
 
 
         #Create pie chart of euro type of expense
@@ -117,6 +117,7 @@ class Plots:
         #Send charts in telegram 
         self.bot.send_photo(MY_USER_ID , photo=open('overall_assets_sum_three_months.png', 'rb'))
         self.bot.send_photo(MY_USER_ID , photo=open('overall_assets_sum_month.png', 'rb'))
+        self.bot.send_photo(MY_USER_ID , photo=open('expenses_barplot_month.png', 'rb'))
         self.bot.send_photo(MY_USER_ID , photo=open('expenses_types_month.png', 'rb'))
         #self.bot.send_photo(MY_USER_ID , photo=open('income_types_month.png', 'rb'))
         self.bot.send_message(MY_USER_ID , str(df_monthexppie)) 

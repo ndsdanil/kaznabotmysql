@@ -19,11 +19,11 @@ class db_connector:
         df = pd.read_sql(query, engine)
         return df
     
-    def get_three_months_dataframe_query():
-        three_months = '\'' + str(date.today() - relativedelta(months =+3)) + '\''
+    def get_five_months_dataframe_query():
+        five_months = '\'' + str(date.today() - relativedelta(months =+5)) + '\''
         engine = create_engine(db_connector.con_string)
 
-        query = 'SELECT date, Income, Expense, Income_Expense_Column, Source, overall_eur, overall_rub, overall_dol FROM kazna_mysql_table WHERE date >= ' + three_months + ';'
+        query = 'SELECT date, Income, Expense, Income_Expense_Column, Source, overall_eur, overall_rub, overall_dol FROM kazna_mysql_table WHERE date >= ' + five_months + ';'
         df = pd.read_sql(query, engine)
         return df
     
