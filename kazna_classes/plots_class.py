@@ -82,6 +82,8 @@ class Plots:
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
         plt.title('Total Expense by Month and Source')
+        plt.legend(title='Source', loc='upper left')
+        plt.savefig('expenses_barplot_month.png')
         
         # Create the list of expenses for the current month
         # Get the current month and year
