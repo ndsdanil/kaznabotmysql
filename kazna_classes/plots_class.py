@@ -77,10 +77,11 @@ class Plots:
         df = df[~df['Source'].str.contains('Transfer|transfer', case=False)]
         grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
         grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
+        yticks = range(0, int(grouped.max().max()) + 1, 100)
+        plt.yticks(yticks, [str(y) for y in yticks])
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
         plt.title('Total Expense by Month and Source')
-        plt.yticks(range(0, int(grouped.max().max())+1, 500))
         
         # Create the list of expenses for the current month
         # Get the current month and year
