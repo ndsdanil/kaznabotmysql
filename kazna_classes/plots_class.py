@@ -1,8 +1,3 @@
-# Get the plot for 3 months of overal sum in euro, rub, dollar 
-# Get the plot for 1 month of overal sum in euro 
-# Get the plot for month of incomes level and expense level on the same plot
-# Get pie chart of types of income in euro
-# Get pie chart of types of expense in euro
 from db_connector import db_connector
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -43,8 +38,8 @@ class Plots:
         if df['Income_Expense_Column'] in btc_list:
             return df['Expense'] / float(exchange_rates['euro_bitc'])
         else:
-            return df['Expense'] 
-    
+            return df['Expense']
+
     def make_plots(self, MY_USER_ID):
         df = db_connector.get_five_months_dataframe_query()
         df.set_index('date', inplace=True, drop=False)
@@ -67,7 +62,6 @@ class Plots:
         plt.xlabel('date')
         plt.grid()
         plt.savefig('overall_assets_sum_month.png')
-
         df_month["eq_expense"] = df_month.apply(self.set_euro_value_for_expense, axis = 1)
 
         # Create barplot for every month of expenses
@@ -76,20 +70,13 @@ class Plots:
         df['month'] = df['date'].dt.to_period('M')  # Create a new column for month
         df = df[~df['Source'].str.contains('Transfer|transfer', case=False)]
         grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
-        ax = grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
-
-        # Adding annotations for total expenses on top of each bar
-        for i, source in enumerate(grouped.columns):
-            total_expense = grouped['eq_expense'].sum()
-            ax.annotate(f'Total: {int(total_expense)}', xy=(i, total_expense), xycoords='data',
-                        xytext=(0, 10), textcoords='offset points', ha='center', va='bottom')
-
+        grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
         plt.title('Total Expense by Month and Source')
         plt.legend(title='Source', bbox_to_anchor = (1.05,1), loc='upper left')
         plt.savefig('expenses_barplot_month.png')
-        
+
         # Create the list of expenses for the current month
         # Get the current month and year
         current_month = datetime.now().month
@@ -99,13 +86,11 @@ class Plots:
         month_expense_list = month_expense_list[~month_expense_list['Source'].str.contains('Transfer|transfer', case=False)]
         month_expense_list = month_expense_list[['Source','eq_expense']].groupby(['Source']).sum()
         month_expense_list = month_expense_list.sort_values(by='eq_expense', ascending=False)
-        
 
 
-        #Send charts in telegram 
+
+        #Send charts in telegram
         self.bot.send_photo(MY_USER_ID , photo=open('overall_assets_sum_three_months.png', 'rb'))
         self.bot.send_photo(MY_USER_ID , photo=open('overall_assets_sum_month.png', 'rb'))
         self.bot.send_photo(MY_USER_ID , photo=open('expenses_barplot_month.png', 'rb'))
-        self.bot.send_message(MY_USER_ID , str(month_expense_list)) 
-
-       
+        self.bot.send_message(MY_USER_ID , str(month_expense_list))
