@@ -75,10 +75,17 @@ class Plots:
         df["eq_expense"] = df.apply(self.set_euro_value_for_expense, axis = 1)
         df['month'] = df['date'].dt.to_period('M')  # Create a new column for month
         df = df[~df['Source'].str.contains('Transfer|transfer', case=False)]
-        max_value_for_plot = int(df['eq_expense'].max())
+        max_value_for_plot = int(df['eq_expense'].max().max())
         grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
-        grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
-        yticks = range(0, 1200, 100)
+        ax = grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
+
+        # Adding annotations for total expenses on top of each bar
+        for i, source in enumerate(grouped.columns):
+            total_expense = grouped[source].sum()
+            ax.annotate(f'Total: {int(total_expense)}', xy=(i, total_expense), xycoords='data',
+                        xytext=(0, 10), textcoords='offset points', ha='center', va='bottom')
+
+        yticks = range(0, max_value_for_plot, 100)
         plt.yticks(yticks, [str(y) for y in yticks])
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
