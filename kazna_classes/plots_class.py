@@ -78,7 +78,7 @@ class Plots:
         max_value_for_plot = int(df['eq_expense'].max())
         grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
         grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
-        yticks = range(0, max_value_for_plot, 100)
+        yticks = range(0, 1200, 100)
         plt.yticks(yticks, [str(y) for y in yticks])
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
