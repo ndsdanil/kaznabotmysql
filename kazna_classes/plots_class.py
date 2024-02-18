@@ -68,6 +68,20 @@ class Plots:
         plt.savefig('overall_assets_sum_month.png')
 
         df_month["eq_expense"] = df_month.apply(self.set_euro_value_for_expense, axis = 1)
+
+        # Create barplot for every month of expenses
+        df['date'] = pd.to_datetime(df['date'])
+        df["eq_expense"] = df.apply(self.set_euro_value_for_expense, axis = 1)
+        df['month'] = df['date'].dt.to_period('M')  # Create a new column for month
+        grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
+        grouped.plot(kind='bar', stacked=True, figsize=(10, 6))
+        plt.xlabel('Month')
+        plt.ylabel('Total Expense')
+        plt.title('Total Expense by Month and Source')
+        plt.legend(title='Source')
+        plt.savefig('expenses_types_month.png')
+
+
         #Create pie chart of euro type of expense
         plt.figure(figsize = (15,10))
         plt.title('Types of expense (month)')
