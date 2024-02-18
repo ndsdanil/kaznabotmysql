@@ -86,6 +86,7 @@ class Plots:
         plt.figure(figsize = (15,10))
         plt.title('Types of expense (month)')
         df_monthexppie = df_month
+        df_monthexppie = df_monthexppie[~df_monthexppie['Source'].str.contains('Transfer|transfer', case=False)]
         df_monthexppie = df_monthexppie[['Source','eq_expense']].groupby(['Source']).sum()
         print(df_monthexppie)
         total_size = sum(df_monthexppie['eq_expense'])
