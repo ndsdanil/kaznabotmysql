@@ -77,7 +77,7 @@ class Plots:
         df = df[~df['Source'].str.contains('Transfer|transfer', case=False)]
         grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
         grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
-        yticks = range(0, int(grouped['eq_expense'].max().max()) + 1, 100)
+        yticks = range(0, int(grouped['eq_expense'].max()) + 1, 100)
         plt.yticks(yticks, [str(y) for y in yticks])
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
