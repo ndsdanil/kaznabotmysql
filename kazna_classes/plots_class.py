@@ -73,6 +73,7 @@ class Plots:
         df['date'] = pd.to_datetime(df['date'])
         df["eq_expense"] = df.apply(self.set_euro_value_for_expense, axis = 1)
         df['month'] = df['date'].dt.to_period('M')  # Create a new column for month
+        df = df[~df['Source'].str.contains('Transfer|transfer', case=False)]
         grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
         grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
         plt.xlabel('Month')
