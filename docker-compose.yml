@@ -20,6 +20,7 @@ services:
     build:
       context: ./kazna_classes
       dockerfile: Dockerfile
+    restart: always
     volumes: 
       - ./kazna_classes:/kazna_mysql/kazna_classes
     links:
