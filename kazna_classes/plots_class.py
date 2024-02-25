@@ -70,7 +70,7 @@ class Plots:
         df['month'] = df['date'].dt.to_period('M')  # Create a new column for month
         df = df[~df['Source'].str.contains('Transfer|transfer', case=False)]
         grouped = df.groupby(['month', 'Source'])['eq_expense'].sum().unstack(fill_value=0)
-        grouped.plot(kind='bar', stacked=True, figsize=(30, 18))
+        grouped.plot(kind='bar', grid = True, stacked=True, figsize=(30, 18))
         plt.xlabel('Month')
         plt.ylabel('Total Expense')
         plt.title('Total Expense by Month and Source')
