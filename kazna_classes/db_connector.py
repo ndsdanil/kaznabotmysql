@@ -15,7 +15,7 @@ class db_connector:
     def get_dataframe_query():
         engine = create_engine(db_connector.con_string)
 
-        query = 'SELECT date, Income, Expense, Source, cash_euro_with_me, cash_euro_not_with_me, cash_$_with_me, cash_$_not_with_me, card_euro, card_$, cash_RUB_not_with_me, card_RUB, bitcoin, shares_RUB, overall_eur, overall_rub, overall_dol FROM kazna_mysql_table;'
+        query = 'SELECT date, Income, Expense, Source, cash_euro_with_me, cash_euro_not_with_me, cash_$_with_me, cash_$_not_with_me, card_euro, card_$, cash_RUB_not_with_me, card_RUB, bitcoin, ethir, shares_RUB, overall_eur, overall_rub, overall_dol FROM kazna_mysql_table;'
         df = pd.read_sql(query, engine)
         return df
     
@@ -30,7 +30,7 @@ class db_connector:
     def get_expense_dataframe_query():
         engine = create_engine(db_connector.con_string)
 
-        query = 'SELECT date, Income, Expense, Source, cash_euro_with_me, cash_euro_not_with_me, cash_$_with_me, cash_$_not_with_me, card_euro, card_$, cash_RUB_not_with_me, card_RUB, bitcoin, shares_RUB, overall_eur, overall_rub, overall_dol FROM kazna_mysql_table WHERE Expense != \'NULL\';'
+        query = 'SELECT date, Income, Expense, Source, cash_euro_with_me, cash_euro_not_with_me, cash_$_with_me, cash_$_not_with_me, card_euro, card_$, cash_RUB_not_with_me, card_RUB, bitcoin, ethir, shares_RUB, overall_eur, overall_rub, overall_dol FROM kazna_mysql_table WHERE Expense != \'NULL\';'
         df = pd.read_sql(query, engine)
         return df
     

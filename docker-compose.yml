@@ -2,9 +2,9 @@ version: '3'
 services:
   mysql:
     image: mysql
-    
+    container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 
+      MYSQL_ROOT_PASSWORD:
       MYSQL_DATABASE: kazna_bot_mysql
     restart: always
     ports:

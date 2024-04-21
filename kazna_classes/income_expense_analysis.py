@@ -12,19 +12,21 @@ class Income_expense_analysis:
         
     def get_overall_account_sum():
         #count sum in rub, eur, $, show grafics for income expense, show info ang grafics about debt
-        options = ['cash_euro_with_me(1), cash_euro_not_with_me(2), cash_$_with_me(3), cash_$_not_with_me(4), card_euro(5), card_$(6), cash_RUB_not_with_me(7), card_RUB(8), bitcoin(9), shares_RUB(10)']
+        options = ['cash_euro_with_me(1), cash_euro_not_with_me(2), cash_$_with_me(3), cash_$_not_with_me(4), card_euro(5), card_$(6), cash_RUB_not_with_me(7), card_RUB(8), bitcoin(9), ethir(10) shares_RUB(11)']
         income_expense_info_list = list()
 
         link_euro_dollar = 'euro_dollar'
         link_euro_bitc = 'euro_bitc'
+        link_euro_ethir = 'euro_ethir'
         link_euro_rub = 'euro_rub'
         exchange_rates_class = Get_exchange_rates()
         cur_list = exchange_rates_class.get_exchange_rates()
 
         eurocard_coef = 0.02
         euro_bitc_value = cur_list[0]
-        euro_dollar_value = cur_list[1]
-        euro_rub_value = cur_list[2]
+        euro_ethir_value = cur_list[1]
+        euro_dollar_value = cur_list[2]
+        euro_rub_value = cur_list[3]
 
         # Custom JSON encoder for Decimal objects
         class DecimalEncoder(json.JSONEncoder):
@@ -36,6 +38,7 @@ class Income_expense_analysis:
         data_dict = {
             link_euro_dollar :euro_dollar_value,
             link_euro_bitc : Decimal(euro_bitc_value),
+            link_euro_ethir : Decimal(euro_ethir_value),
             link_euro_rub :euro_rub_value,}
         
         with open('exchange_rates.json', 'w') as file:
@@ -50,10 +53,10 @@ class Income_expense_analysis:
         #H2+I2+(J2/AA$3)+(K2/AA$3)+(L2-(L2*AA$4))+(M2/AA$3-((M2/AA$3)*AA$4))+(N2/AA$5)+(O2/AA$5)+(P2/AA$2)+(Q2/AA$5)
 
 
-        print(income_expense_info_list[0][0])
-        print(income_expense_info_list[0][0][0])
+        #print(income_expense_info_list[0][0])
+        #print(income_expense_info_list[0][0][0])
        
-        result_eur = income_expense_info_list[0][0][0] + income_expense_info_list[0][0][1] + (float(income_expense_info_list[0][0][2])/float(data_dict[link_euro_dollar])) + (float(income_expense_info_list[0][0][3])/float(data_dict[link_euro_dollar])) + (income_expense_info_list[0][0][4] - (income_expense_info_list[0][0][4]* eurocard_coef)) + (float(income_expense_info_list[0][0][5])/float(data_dict[link_euro_dollar]) - ((float(income_expense_info_list[0][0][5])/float(data_dict[link_euro_dollar]))*eurocard_coef)) + (float(income_expense_info_list[0][0][6])/float(data_dict[link_euro_rub])) + (float(income_expense_info_list[0][0][7])/float(data_dict[link_euro_rub])) + (float(income_expense_info_list[0][0][8])/float(data_dict[link_euro_bitc])) + (float(income_expense_info_list[0][0][9])/float(data_dict[link_euro_rub]))
+        result_eur = income_expense_info_list[0][0][0] + income_expense_info_list[0][0][1] + (float(income_expense_info_list[0][0][2])/float(data_dict[link_euro_dollar])) + (float(income_expense_info_list[0][0][3])/float(data_dict[link_euro_dollar])) + (income_expense_info_list[0][0][4] - (income_expense_info_list[0][0][4]* eurocard_coef)) + (float(income_expense_info_list[0][0][5])/float(data_dict[link_euro_dollar]) - ((float(income_expense_info_list[0][0][5])/float(data_dict[link_euro_dollar]))*eurocard_coef)) + (float(income_expense_info_list[0][0][6])/float(data_dict[link_euro_rub])) + (float(income_expense_info_list[0][0][7])/float(data_dict[link_euro_rub])) + (float(income_expense_info_list[0][0][8])/float(data_dict[link_euro_bitc])) + (float(income_expense_info_list[0][0][9])/float(data_dict[link_euro_ethir])) + (float(income_expense_info_list[0][0][10])/float(data_dict[link_euro_rub]))
         result_eur = int(result_eur)
         result_rub = int(result_eur * float(data_dict[link_euro_rub]))
         result_dol = int(result_eur * float(data_dict[link_euro_dollar]))

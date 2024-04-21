@@ -30,6 +30,7 @@ class Plots:
         dol_list = ['cash_$_with_me', 'cash_$_not_with_me', 'card_$']
         rub_list = ['cash_RUB_not_with_me', 'card_RUB', 'shares_RUB']
         btc_list = ['bitcoin']
+        eth_list = ['ethir']
 
         if df['Income_Expense_Column'] in dol_list:
             return df['Expense'] / float(exchange_rates['euro_dollar'])
@@ -37,6 +38,8 @@ class Plots:
             return df['Expense'] / float(exchange_rates['euro_rub'])
         if df['Income_Expense_Column'] in btc_list:
             return df['Expense'] / float(exchange_rates['euro_bitc'])
+        if df['Income_Expense_Column'] in eth_list:
+            return df['Expense'] / float(exchange_rates['euro_ethir'])
         else:
             return df['Expense']
 

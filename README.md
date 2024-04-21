@@ -27,4 +27,3 @@ docker-compose up
 docker stop $(docker ps -aq)
 docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker-compose build && docker-compose up   
 docker system prune -a  -clear after docker
-  
